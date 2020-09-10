@@ -46,7 +46,10 @@ export default class StorageManager {
     }
 
     get_server_info(serverId){
-        return json_data[serverId]
+        if(serverId in this.json_data){
+            return this.json_data[serverId]
+        }
+        else return false
     }
 
     set_server_info(serverId, serverObject){
