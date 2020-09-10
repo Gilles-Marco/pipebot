@@ -1,5 +1,6 @@
 import give_info from './give_info.js'
 import version from './version.js'
+import Discord from 'discord.js'
 
 export default (msg) => {
     /**
@@ -10,7 +11,16 @@ export default (msg) => {
     let tokens = msg.content.split(' ')
     switch(tokens[1]){
         case 'giveinfo':
-            return give_info()
+            let default_channel = undefined
+            let channel_ids = msg.guild.channels.keyArray()
+            for(let i=0;i<channel_ids.length;i++){
+                let channel = msg.guild.channels.get(channel_ids[i])
+                if (channel.type === 'text'){
+                    default_channel = channel
+                    break
+                }
+            }
+            return give_info(msg.guild.id, default_channel)
         case 'version':
             return version()
         default:
