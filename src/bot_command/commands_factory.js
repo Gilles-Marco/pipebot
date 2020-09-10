@@ -11,6 +11,7 @@ export default (msg) => {
     let tokens = msg.content.split(' ')
     switch(tokens[1]){
         case 'giveinfo':
+            //Todo change to fetch default channel specified, if none, fetch the first text channel
             let default_channel = undefined
             let channel_ids = msg.guild.channels.keyArray()
             for(let i=0;i<channel_ids.length;i++){
