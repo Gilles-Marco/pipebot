@@ -14,6 +14,10 @@ export default (msg) => {
         case 'version':
             return version()
         default:
-            return 'Here is the list of the commands\n- giveinfo\n- version'
+            let explanations = [
+                "giveinfo - Give information how to send message to pipebot server to pipe it into discord's server",
+                "version - Give pipebot's version",
+            ]
+            return `Here is the list of the commands\n${explanations.join('\n')}`
     }
 }
