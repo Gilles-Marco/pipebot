@@ -1,22 +1,13 @@
 import StorageManager from '../storage_manager.js'
 import config from '../../config.js'
+import { is_channel_exist } from '../utils.js'
 
 export default (server, channelName) => {
     let storage_instance = StorageManager.getInstance()
     channelName = channelName.replace('"', '').toLowerCase()
 
     //Check if channel exist
-    let channel_ids = server.channels.keyArray()
-    let channel_names = []
-    for(let i=0;i<channel_ids.length;i++){
-        let channel = server.channels.get(channel_ids[i])
-        if(channel.type === 'text'){
-            channel_names.push(channel.name)
-        }
-    }
-
-    console.log(channel_names)
-    if (!(channel_names.includes(channelName))){
+    if(!is_channel_exist(server.channels, channelName)){
         return 'This channel doesn\'t exist'
     }
 

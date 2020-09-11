@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import StorageManager from '../storage_manager.js'
 const process = dotenv.config().parsed
 import config from '../../config.js'
+import { get_first_text_channel } from '../utils.js'
 
 export default (server) => {
 /**
@@ -18,14 +19,7 @@ export default (server) => {
     }
 
     if (default_channel === null){
-        let channel_ids = server.channels.keyArray()
-        for(let i=0;i<channel_ids.length;i++){
-            let channel = server.channels.get(channel_ids[i])
-            if (channel.type === 'text'){
-                default_channel = channel
-                break
-            }
-        }
+        default_channel = get_first_text_channel(server.channels)
     }
 
     const msg = `To send a message to pipe into discord's server you have to send an HTTP POST request to this URL\n\
