@@ -42,7 +42,7 @@ If your channel has space in his name you must put it between quotes. If pipebot
 
 If you doesn't set a default channel or a specified channel output pipebot will print the message in the first text channel it founds.
 
-Message's format must be
+Message format must be
 
 ```json
 {
