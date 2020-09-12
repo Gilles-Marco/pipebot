@@ -9,7 +9,7 @@ export default (msg) => {
      */
 
     let tokens = msg.content.split(' ')
-    switch(tokens[1]){
+    switch (tokens[1]) {
         case 'giveinfo':
             return give_info(msg.guild)
         case 'version':

@@ -2,23 +2,25 @@ import dotenv from 'dotenv'
 import StorageManager from '../storage_manager.js'
 const process = dotenv.config().parsed
 import config from '../../config.js'
-import { get_first_text_channel } from '../utils.js'
+import {
+    get_first_text_channel
+} from '../utils.js'
 
 export default (server) => {
-/**
- * Send the information to send POST request to the user
- * @returns {String} - Message to send back to user
- */
+    /**
+     * Send the information to send POST request to the user
+     * @returns {String} - Message to send back to user
+     */
     let default_channel = null
     let server_data = null
 
     let instance_storage = StorageManager.getInstance()
-    if((server_data = instance_storage.get_server_info(server.id))){
-        if(config.default_channel_key in server_data)
+    if ((server_data = instance_storage.get_server_info(server.id))) {
+        if (config.default_channel_key in server_data)
             default_channel = server_data.default_channel
     }
 
-    if (default_channel === null){
+    if (default_channel === null) {
         default_channel = get_first_text_channel(server.channels)
     }
 

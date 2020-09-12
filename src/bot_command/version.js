@@ -1,5 +1,7 @@
 import fs from 'fs'
-const version = JSON.parse(fs.readFileSync('./package.json', {encoding: 'utf-8'})).version
+const version = JSON.parse(fs.readFileSync('./package.json', {
+    encoding: 'utf-8'
+})).version
 
 export default () => {
     /**
