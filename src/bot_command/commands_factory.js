@@ -18,7 +18,7 @@ export default (msg) => {
             return set_default_channel(msg.guild, tokens[2])
         default:
             let explanations = [
-                "giveinfo - Give information how to send message to pipebot server to pipe it into discord's server",
+                "giveinfo - Give information how to send message to pipebot http server to pipe it into discord's server",
                 "version - Give pipebot's version",
                 "set_default_channel <channel's name> - Set the default channel output\n\tIf name contains space you have to put it between quotes",
             ]
