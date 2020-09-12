@@ -23,7 +23,7 @@ To install pipebot
 5. Simply run this command in your terminal
 
 ```
-git clone https://github.com/Gilles-Marco/pipebot.gits
+git clone https://github.com/Gilles-Marco/pipebot.git
 cd pipebot
 npm install
 echo "URL=127.0.0.1\nPORT=55555\nTOKEN=<your-token-here>\n" > .env
