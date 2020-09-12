@@ -36,7 +36,7 @@ Pipebot prefix is pipebot
 
 - pipebot giveinfo - Give information how to send message to pipebot http server to pipe it into discord's server
 - pipebot version - Give pipebot's version
-- pipebot set_default_channel <your-channel-name> - Set the default channel output
+- pipebot set_default_channel <\your-channel-name> - Set the default channel output
 
 If your channel has space in his name you must put it between quotes. If pipebot can't find it, it will tell you.
 
