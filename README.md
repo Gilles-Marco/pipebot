@@ -26,7 +26,7 @@ To install pipebot
 git clone https://github.com/Gilles-Marco/pipebot.git
 cd pipebot
 npm install
-echo "URL=127.0.0.1\nPORT=55555\nTOKEN=<your-token-here>\n" > .env
+echo "URL=<your-server-ip-or-domain>\nPORT=55555\nTOKEN=<your-token-here>\n" > .env
 npm start
 ```
 
