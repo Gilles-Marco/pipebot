@@ -6,7 +6,7 @@ Pipebot is under ISC license
 
 ## Description
 
-Pipebot is a simple discord bot. His goal is simplify how to send messages into a discord servers' channel.
+Pipebot is a simple discord bot. His goal is to simplify how to send messages into a discord servers' channel.
 
 Pipebot receive message from HTTP POST request and send it into a channel.
 
