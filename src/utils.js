@@ -46,9 +46,10 @@ export function is_channel_exist(channels, channelName) {
  *
  *
  * @export
- * @param {Discord.User} user 
+ * @param {Discord.GuildMember} user 
  * @return {boolean} true if admin false if not
  */
-export function is_admin(user) {
-    return false
+export function is_admin(member) {
+    if (member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) return true
+    else return false
 }
