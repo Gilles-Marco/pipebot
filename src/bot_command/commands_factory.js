@@ -1,6 +1,6 @@
 import give_info from './give_info.js'
 import version from './version.js'
-import set_default_channel from './set_default_channel'
+import set_default_channel from './set_default_channel.js'
 
 export default (msg) => {
     /**

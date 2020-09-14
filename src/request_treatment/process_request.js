@@ -4,7 +4,16 @@ import {
     get_channel_by_name,
     get_first_text_channel
 } from '../utils.js'
+import Discord from 'discord.js'
 
+/**
+ *
+ *
+ * @export
+ * @param {String} request string to transform to JSON representing POST request body
+ * @param {Discord.Client} discord_client discord client who manage the bot
+ * @return {Object} return information to write off in the request response
+ */
 export function processing_request(request, discord_client) {
     request = JSON.parse(request)
 
@@ -35,6 +44,13 @@ export function processing_request(request, discord_client) {
     }
 }
 
+/**
+ * Validate if the POST Request is valid
+ * by checking if it has all required attribute
+ *
+ * @param {Object} request
+ * @return {Boolean} 
+ */
 function request_is_valid(request) {
     if ('serverId' in request && 'message' in request)
         return true
@@ -42,11 +58,25 @@ function request_is_valid(request) {
         return false
 }
 
+/**
+ * Check if the server has installed the bot
+ *
+ * @param {Discord.Client} discord_client
+ * @param {String} serverId server key
+ * @return {Boolean} 
+ */
 function is_server_existing(discord_client, serverId) {
     let guilds_ids = discord_client.guilds.keyArray()
     return guilds_ids.includes(serverId)
 }
 
+/**
+ * Get the default channel for the specified server in the request
+ *
+ * @param {Discord.Client} discord_client
+ * @param {Object} request
+ * @return {Discord.Channel} 
+ */
 function get_channel_output(discord_client, request) {
     let storage_instance = StorageManager.getInstance()
     let server_info = storage_instance.get_server_info(request.serverId)
