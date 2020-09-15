@@ -26,13 +26,29 @@ function get_ready_bot(){
     })
 }
 
+function send_message(){
+    return new Promise((resolve, reject)=>{
+        let timeout = setTimeout(()=>{
+            reject('error')
+        }, 3000)
+    })
+}
+
+function get_message(bot){
+    return new Promise((resolve, reject)=>{
+        let timeout = setTimeout(()=>{
+            reject('error')
+        }, 3000)
+    })
+}
+
 describe('Bot command test', ()=>{
     it('Give right info', async ()=>{
-        let value = await get_ready_bot().catch((error)=>{
+        let bot = await get_ready_bot().catch((error)=>{
             assert.fail(`Error ${error}`)
         })
 
-        let server = value.guilds.get(value.guilds.firstKey())
+        let server = bot.guilds.get(bot.guilds.firstKey())
         let default_channel = get_default_channel(server)
 
         let right_message = `To send a message to pipe into discord's server you have to send an HTTP POST request to this URL\n\
@@ -45,7 +61,7 @@ describe('Bot command test', ()=>{
     }\n\
     Default channel is ${default_channel}`
         let generated_message = give_info(server)
-        value.destroy()
+        bot.destroy()
         assert(generated_message == right_message, 'Give_info doesnt give the right info')     
     })
 
@@ -58,19 +74,25 @@ describe('Bot command test', ()=>{
         assert(generated_message == right_message, 'pipebot doesnt give the right version')
     })
 
-    it('set_default_channel wrong_guild', () => {
-        
+    it('set_default_channel wrong_guild', async () => {
+        let bot = await get_ready_bot().catch((error)=>{
+            assert.fail(`Error : ${error}`)
+        })
+
+        send_message()
+        let message = await get_message(bot)
+        set_default_channel(msg, )
+    }) 
+
+    it('set_default_channel wrong_channel', async () => {
+
     })
 
-    it('set_default_channel wrong_channel', () => {
+    it('set_default_channel not_an_admin_user', async () => {
 
     })
 
-    it('set_default_channel not_an_admin_user', () => {
-
-    })
-
-    it('set_default_channel good', () => {
+    it('set_default_channel good', async () => {
 
     })
 })
