@@ -1,5 +1,6 @@
 import Discord from 'discord.js'
 import StorageManager from './storage_manager.js'
+import config from '../config.js'
 
 /**
  *

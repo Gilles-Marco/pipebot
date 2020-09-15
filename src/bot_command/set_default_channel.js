@@ -5,9 +5,10 @@ import {
     is_admin
 } from '../utils.js'
 
-export default (msg, channelName) => {
+export default (msg) => {
 
     let server = msg.guild
+    let channelName = msg.content.split(' ')[2]
 
     let storage_instance = StorageManager.getInstance()
     channelName = channelName.replace('"', '').toLowerCase()

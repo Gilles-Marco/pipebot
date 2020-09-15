@@ -15,7 +15,7 @@ export default (msg) => {
         case 'version':
             return version()
         case 'set_default_channel':
-            return set_default_channel(msg, tokens[2])
+            return set_default_channel(msg)
         default:
             let explanations = [
                 "giveinfo - Give information how to send message to pipebot http server to pipe it into discord's server",

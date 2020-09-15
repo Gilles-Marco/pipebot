@@ -3,12 +3,20 @@ import dotenv from 'dotenv'
 import { get_default_channel } from '../../src/utils.js'
 import give_info from '../../src/bot_command/give_info.js'
 import version from '../../src/bot_command/version.js'
-import set_default_channel from '../../src/bot_command/set_default_channel.js'
 import Discord from 'discord.js'
 import fs from 'fs'
+import set_default_channel from '../../src/bot_command/set_default_channel.js'
+import settup from '../../config.js'
+import StorageManager from '../../src/storage_manager.js'
 
 let assert = chai.assert
 let process = dotenv.config().parsed
+
+let bot = null
+let server = null
+let channel = null
+let admin = null
+let simple_member = null
 
 function get_ready_bot(){
     return new Promise((resolve, reject)=>{
@@ -26,31 +34,34 @@ function get_ready_bot(){
     })
 }
 
-function send_message(){
-    return new Promise((resolve, reject)=>{
-        let timeout = setTimeout(()=>{
-            reject('error')
-        }, 3000)
-    })
+function get_admin_member(bot, serverId){
+    return bot.guilds.get(serverId).members.find(member => member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR))
 }
 
-function get_message(bot){
-    return new Promise((resolve, reject)=>{
-        let timeout = setTimeout(()=>{
-            reject('error')
-        }, 3000)
-    })
+function get_nonadmin_member(bot, serverId){
+    return bot.guilds.get(serverId).members.find(member => !(member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)))
+}
+
+function get_server_default_channel(serverId){
+    let instance = StorageManager.getInstance()
+    let server_info = instance.get_server_info(serverId)
+    return server_info[settup.default_channel_key]
 }
 
 describe('Bot command test', ()=>{
+    before(async ()=>{
+        bot = await get_ready_bot()
+        server = bot.guilds.get(bot.guilds.firstKey())
+        channel = get_default_channel(bot.guilds.get(bot.guilds.firstKey()))
+        admin = get_admin_member(bot, server.id)
+        simple_member = get_nonadmin_member(bot, server.id)
+    })
+
+    after(()=>{
+        bot.destroy()
+    })
+
     it('Give right info', async ()=>{
-        let bot = await get_ready_bot().catch((error)=>{
-            assert.fail(`Error ${error}`)
-        })
-
-        let server = bot.guilds.get(bot.guilds.firstKey())
-        let default_channel = get_default_channel(server)
-
         let right_message = `To send a message to pipe into discord's server you have to send an HTTP POST request to this URL\n\
     URL : ${process.URL+":"+process.PORT}\n\
     With this HTTP Request you have to send a JSON body\n\
@@ -59,9 +70,8 @@ describe('Bot command test', ()=>{
         \t"channel": <channel-to-pipe-in>(optionnal),\n\
         \t"message": <your-message-here>\n\
     }\n\
-    Default channel is ${default_channel}`
+    Default channel is ${channel}`
         let generated_message = give_info(server)
-        bot.destroy()
         assert(generated_message == right_message, 'Give_info doesnt give the right info')     
     })
 
@@ -74,25 +84,37 @@ describe('Bot command test', ()=>{
         assert(generated_message == right_message, 'pipebot doesnt give the right version')
     })
 
-    it('set_default_channel wrong_guild', async () => {
-        let bot = await get_ready_bot().catch((error)=>{
-            assert.fail(`Error : ${error}`)
-        })
+    it('set_default_channel good', ()=>{
+        let msg = {
+            guild: server,
+            member: admin,
+            content: `pipebot set_default_channel ${channel}`
+        }
 
-        send_message()
-        let message = await get_message(bot)
-        set_default_channel(msg, )
-    }) 
-
-    it('set_default_channel wrong_channel', async () => {
-
+        let return_func = set_default_channel(msg)
+        assert(return_func == `Default channel set to ${channel}`, `Pipebot hasnt setted the right channel, ${return_func} instead of ${channel}`)
+        assert(get_server_default_channel(server.id) == channel, `Wrong channel set in the storage file, stored ${get_server_default_channel(server.id)} instead of ${channel}`)
     })
 
-    it('set_default_channel not_an_admin_user', async () => {
+    it('set_default_channel wrong user', ()=>{
+        let msg = {
+            guild: server,
+            member: simple_member,
+            content: `pipebot set_default_channel ${channel}`
+        }
 
+        let return_func = set_default_channel(msg)
+        assert(return_func == 'You need to be an administrator to do this action', `Pipebot has set a channel, ${return_func} when he shouldnt`)
     })
 
-    it('set_default_channel good', async () => {
+    it('set_default_channel wrong channel', ()=>{
+        let msg = {
+            guild: server,
+            member: admin,
+            content: `pipebot set_default_channel udenufjojfojojojjojoj`
+        }
 
+        let return_func = set_default_channel(msg)
+        assert(return_func == `This channel doesn\'t exist`, `Pipebot has set an inexisting channel ${return_func}`)
     })
 })
