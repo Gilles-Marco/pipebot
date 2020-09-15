@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon --ignore storage.json --exec babel-node index.js",
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "author": "Marco gilles",
   "license": "ISC",

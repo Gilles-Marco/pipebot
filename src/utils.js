@@ -1,4 +1,5 @@
 import Discord from 'discord.js'
+import StorageManager from './storage_manager.js'
 
 /**
  *
@@ -52,4 +53,28 @@ export function is_channel_exist(channels, channelName) {
 export function is_admin(member) {
     if (member.hasPermission(Discord.Permissions.FLAGS.ADMINISTRATOR)) return true
     else return false
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {Discord.Guild} server server to fetch the default channel
+ * @return {Discord.Channel} default channel
+ */
+export function get_default_channel(server){
+    let default_channel = null
+    let server_data = null
+
+    let instance_storage = StorageManager.getInstance()
+    if ((server_data = instance_storage.get_server_info(server.id))) {
+        if (config.default_channel_key in server_data)
+            default_channel = server_data.default_channel
+    }
+
+    if (default_channel === null) {
+        default_channel = get_first_text_channel(server.channels)
+    }
+
+    return default_channel
 }
