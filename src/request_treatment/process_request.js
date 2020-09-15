@@ -24,8 +24,15 @@ export function processing_request(request, discord_client) {
         if (is_server_existing(discord_client, request.serverId)) {
             // Get channel to output the message
             let output_channel = get_channel_output(discord_client, request)
-            output_channel.send(request.message)
-            body = `the message was sent successfully to channel ${output_channel.name}`
+            if(output_channel){
+                output_channel.send(request.message)
+                body = `the message was sent successfully to channel ${output_channel.name}`
+            }
+            else{
+                status = 500
+                body = `Something went wrong trying to recover the channel`
+            }
+            
         } else {
             status = 400
             body = "This server does not exist or has not installed this instance of pipebot"
@@ -51,7 +58,7 @@ export function processing_request(request, discord_client) {
  * @param {Object} request
  * @return {Boolean} 
  */
-function request_is_valid(request) {
+export function request_is_valid(request) {
     if ('serverId' in request && 'message' in request)
         return true
     else
@@ -65,7 +72,7 @@ function request_is_valid(request) {
  * @param {String} serverId server key
  * @return {Boolean} 
  */
-function is_server_existing(discord_client, serverId) {
+export function is_server_existing(discord_client, serverId) {
     let guilds_ids = discord_client.guilds.keyArray()
     return guilds_ids.includes(serverId)
 }
@@ -77,7 +84,7 @@ function is_server_existing(discord_client, serverId) {
  * @param {Object} request
  * @return {Discord.Channel} 
  */
-function get_channel_output(discord_client, request) {
+export function get_channel_output(discord_client, request) {
     let storage_instance = StorageManager.getInstance()
     let server_info = storage_instance.get_server_info(request.serverId)
     // Priority for channel in the request

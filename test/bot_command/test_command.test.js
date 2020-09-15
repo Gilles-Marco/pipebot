@@ -18,14 +18,14 @@ let channel = null
 let admin = null
 let simple_member = null
 
-function get_ready_bot(){
+export function get_ready_bot(){
     return new Promise((resolve, reject)=>{
         let bot = new Discord.Client()
         bot.login(process.TOKEN)
 
         let timeout = setTimeout(()=>{
             reject('timeout')
-        }, 3000)
+        }, 10000)
 
         bot.on('ready', ()=>{
             clearTimeout(timeout)
@@ -85,26 +85,27 @@ describe('Bot command test', ()=>{
     })
 
     it('set_default_channel good', ()=>{
+        let channelName = channel.name
         let msg = {
             guild: server,
             member: admin,
-            content: `pipebot set_default_channel ${channel}`
+            content: `pipebot set_default_channel ${channelName}`
         }
 
         let return_func = set_default_channel(msg)
-        assert(return_func == `Default channel set to ${channel}`, `Pipebot hasnt setted the right channel, ${return_func} instead of ${channel}`)
-        assert(get_server_default_channel(server.id) == channel, `Wrong channel set in the storage file, stored ${get_server_default_channel(server.id)} instead of ${channel}`)
+        assert(return_func == `Default channel set to ${channelName}`, `Pipebot hasnt setted the right channel, "${return_func}" instead of ${channelName}`)
+        assert(get_server_default_channel(server.id) == channelName, `Wrong channel set in the storage file, stored ${get_server_default_channel(server.id)} instead of ${channelName}`)
     })
 
     it('set_default_channel wrong user', ()=>{
         let msg = {
             guild: server,
             member: simple_member,
-            content: `pipebot set_default_channel ${channel}`
+            content: `pipebot set_default_channel ${channel.name}`
         }
 
         let return_func = set_default_channel(msg)
-        assert(return_func == 'You need to be an administrator to do this action', `Pipebot has set a channel, ${return_func} when he shouldnt`)
+        assert(return_func == 'You need to be an administrator to do this action', `Pipebot has set a channel, "${return_func}" when he shouldnt`)
     })
 
     it('set_default_channel wrong channel', ()=>{
@@ -115,6 +116,6 @@ describe('Bot command test', ()=>{
         }
 
         let return_func = set_default_channel(msg)
-        assert(return_func == `This channel doesn\'t exist`, `Pipebot has set an inexisting channel ${return_func}`)
+        assert(return_func == `This channel doesn\'t exist`, `Pipebot has set an inexisting channel "${return_func}"`)
     })
 })

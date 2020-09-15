@@ -70,7 +70,7 @@ export function get_default_channel(server){
     let instance_storage = StorageManager.getInstance()
     if ((server_data = instance_storage.get_server_info(server.id))) {
         if (config.default_channel_key in server_data)
-            default_channel = server_data.default_channel
+            default_channel = get_channel_by_name(server.channels, server_data.default_channel)
     }
 
     if (default_channel === null) {
